@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "../../hook";
-import { removeCity } from '../../store/weatherSlice';
+import { removeCity, updateWeather } from '../../store/weatherSlice';
 import WeatherCard from "./WeatherCard";
 
 export type WeatherItemType = {
@@ -14,12 +14,12 @@ const WeatherCardContainer: React.FC = () => {
     const weatherArray = useAppSelector((state) => state.weather.cityList);
 
     const handleDelete = (id: number): {} => {
-        return dispatch(removeCity(id))
+        return dispatch(removeCity(id));
     };
 
-    // const handleUpdate = (id: number): {} => {
-    //     return dispatch(updateWeather(id))
-    // };
+    const handleUpdate = (name: string): {} => {
+        return dispatch(updateWeather(name));
+    };
 
     return (
         <div style={{
@@ -38,6 +38,7 @@ const WeatherCardContainer: React.FC = () => {
                         temperature={main} 
                         id={id} 
                         handleDelete={() => handleDelete(id)}
+                        handleUpdate={() => handleUpdate(name.toLowerCase())}
                     />
                 ))
             ) : <div>no city</div>

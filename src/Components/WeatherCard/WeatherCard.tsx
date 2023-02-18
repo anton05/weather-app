@@ -7,10 +7,13 @@ export type WeatherItemType = {
     name: string,
     temperature: {temp: number},
     id: number,
-    handleDelete: () => void
+    handleDelete: () => void,
+    handleUpdate: () => void
 };
 
-const WeatherCardContainer: React.FC<WeatherItemType> = ({ name, temperature, id, handleDelete }) => {
+const WeatherCardContainer: React.FC<WeatherItemType> = ({ name, temperature, handleDelete, handleUpdate }) => { 
+
+    const celsius = (temperature.temp - 273.15).toString().slice(0,3);
 
     return (
         <div className="card-container">
@@ -20,15 +23,19 @@ const WeatherCardContainer: React.FC<WeatherItemType> = ({ name, temperature, id
             <div className="link">
                 <Link style={{textDecoration: 'none'}} to={`details/${name.toLowerCase()}`}>
                     <div className="name">
-                        {name.toUpperCase()}
+                        {
+                            name.length > 10 
+                            ? name.toUpperCase().slice(0, 8)+"..."
+                            : name
+                        }
                     </div>
                     <div className="temperature">
-                        {temperature.temp}
+                        {celsius}<span style={{ color: "black", marginLeft: "1px" }}>°C</span>
                     </div>
                 </Link>
             </div>
             <div className="update">
-                <UpdateIcon />
+                <UpdateIcon style={{ cursor: "pointer" }} onClick={handleUpdate} />
             </div>
         </div>
     );

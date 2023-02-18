@@ -27,7 +27,22 @@ export const fetchWeather = createAsyncThunk(
             };
             return false;
     }
-)
+);
+
+export const updateWeather = createAsyncThunk(
+    'weather/updateWeather',
+    async (city: string) => {
+            const res = await fetch(
+                `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${WEATHER_API_KEY}`
+            );
+            
+            if (res.ok) {
+                const data = await res.json();
+                return data;
+            };
+            return false;
+    }
+);
 
 const weatherSlice = createSlice({
     name: 'weather',
@@ -39,11 +54,6 @@ const weatherSlice = createSlice({
         removeCity(state, action) {
             state.cityList = state.cityList?.filter(city => city.id !== action.payload);
         },
-        // updateWeather(state, action) {
-        //     const arrayOfCityId = state.cityList.map(i => i.id);
-        //     const index = arrayOfCityId.indexOf(action.payload);
-        //     state.cityList[index].main.temp = `+${Math.floor(Math.random() * 30)}`;
-        // },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchWeather.pending, (state) => {
@@ -61,6 +71,16 @@ const weatherSlice = createSlice({
             state.error = false;
             state.isLoading = false;
         })
+        builder.addCase(updateWeather.fulfilled, (state, action) => {
+            if (!action.payload) {
+             state.cityList = state.cityList;
+             return;
+            }
+ 
+            const arrayOfCityName = state.cityList.map(i => i.name);
+            const index = arrayOfCityName.indexOf(action.payload.name);
+            state.cityList[index] = action.payload;
+         })
       },
     })
 
