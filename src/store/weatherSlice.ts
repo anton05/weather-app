@@ -3,13 +3,15 @@ import type { WeatherItemType } from '../Components/WeatherCard/WeatherCardConta
 import { WEATHER_API_KEY } from '../API/API';
 
 export type WeatherStateType = {
-    cityList: WeatherItemType[] | undefined,
+    cityList: WeatherItemType[],
     isLoading: boolean,
+    error: boolean
 };
 
 const initialState: WeatherStateType = {
     cityList: [],
     isLoading: false,
+    error: false
 };
 
 export const fetchWeather = createAsyncThunk(
@@ -23,7 +25,6 @@ export const fetchWeather = createAsyncThunk(
                 const data = await res.json();
                 return data;
             };
-
             return false;
     }
 )
@@ -49,11 +50,16 @@ const weatherSlice = createSlice({
             state.isLoading = true;
         })
         builder.addCase(fetchWeather.fulfilled, (state, action) => {
-            state.cityList?.push(action.payload);
+           if (!action.payload) {
+            state.cityList = state.cityList;
+            state.error = true;
             state.isLoading = false;
-        })
-        builder.addCase(fetchWeather.rejected, (state) => {
-            state.cityList = undefined;
+            return;
+           }
+
+            state.cityList.push(action.payload);
+            state.error = false;
+            state.isLoading = false;
         })
       },
     })

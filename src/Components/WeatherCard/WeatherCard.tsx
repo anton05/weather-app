@@ -15,14 +15,14 @@ const WeatherCardContainer: React.FC<WeatherItemType> = ({ name, temperature, id
     return (
         <div className="card-container">
             <div className="delete">
-                <CloseIcon onClick={handleDelete} fontSize='small' />
+                <CloseIcon onClick={handleDelete} fontSize='small' style={{ cursor: "pointer" }} />
             </div>
             <div className="link">
                 <Link style={{textDecoration: 'none'}} to={`details/${name.toLowerCase()}`}>
-                    <div style={{ display: "flex", justifyContent: "center" }}>
+                    <div className="name">
                         {name.toUpperCase()}
                     </div>
-                    <div style={{ marginTop: "10px", display: "flex", justifyContent: "center" }}>
+                    <div className="temperature">
                         {temperature.temp}
                     </div>
                 </Link>

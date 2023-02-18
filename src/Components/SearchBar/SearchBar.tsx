@@ -11,6 +11,7 @@ const SearchBar: React.FC = () => {
 
     const isLoading = useAppSelector(state => state.weather.isLoading);
     const cityList = useAppSelector(state => state.weather.cityList);
+    const error = useAppSelector(state => state.weather.error);
 
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setInputValue(e.target.value);  
@@ -40,6 +41,16 @@ const SearchBar: React.FC = () => {
                     multiline
                     variant="standard"
                 />
+                {
+                    error  
+                    ? <div style={{ 
+                            marginTop: "5px", 
+                            color: "red" 
+                        }} >
+                            UNCORRECT CITY NAME!
+                        </div> 
+                    : null
+                }
             </div>
             <div>
                 <Button 
