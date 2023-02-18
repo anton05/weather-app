@@ -5,13 +5,15 @@ import { WEATHER_API_KEY } from '../API/API';
 export type WeatherStateType = {
     cityList: WeatherItemType[],
     isLoading: boolean,
-    error: boolean
+    error: boolean,
+    updateInProgress: string[],
 };
 
 const initialState: WeatherStateType = {
     cityList: [],
     isLoading: false,
-    error: false
+    error: false,
+    updateInProgress: []
 };
 
 export const fetchWeather = createAsyncThunk(
@@ -54,6 +56,9 @@ const weatherSlice = createSlice({
         removeCity(state, action) {
             state.cityList = state.cityList?.filter(city => city.id !== action.payload);
         },
+        updateInProgress(state, action) {
+            state.updateInProgress.push(action.payload.toLowerCase());
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchWeather.pending, (state) => {
@@ -80,10 +85,11 @@ const weatherSlice = createSlice({
             const arrayOfCityName = state.cityList.map(i => i.name);
             const index = arrayOfCityName.indexOf(action.payload.name);
             state.cityList[index] = action.payload;
+            state.updateInProgress = state.updateInProgress.filter(i => i.toLowerCase() !== action.payload.name.toLowerCase());
          })
       },
     })
 
-export const { removeCity, setLoading } = weatherSlice.actions;
+export const { removeCity, setLoading, updateInProgress } = weatherSlice.actions;
 
 export default weatherSlice.reducer;

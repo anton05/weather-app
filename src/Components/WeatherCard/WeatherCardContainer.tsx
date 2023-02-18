@@ -1,24 +1,27 @@
 import { useAppDispatch, useAppSelector } from "../../hook";
-import { removeCity, updateWeather } from '../../store/weatherSlice';
+import { removeCity, updateInProgress, updateWeather } from '../../store/weatherSlice';
 import WeatherCard from "./WeatherCard";
 
 export type WeatherItemType = {
     name: string,
     main: {temp: number},
-    id: number
+    id: number,
+    arrayOfProgress: []
 };
 
 const WeatherCardContainer: React.FC = () => {
     const dispatch = useAppDispatch();
 
     const weatherArray = useAppSelector((state) => state.weather.cityList);
+    const arrayOfProgress = useAppSelector((state) => state.weather.updateInProgress);
 
     const handleDelete = (id: number): {} => {
         return dispatch(removeCity(id));
     };
 
-    const handleUpdate = (name: string): {} => {
-        return dispatch(updateWeather(name));
+    const handleUpdate = (name: string) => {
+         dispatch(updateInProgress(name));
+         dispatch(updateWeather(name));
     };
 
     return (
@@ -39,6 +42,7 @@ const WeatherCardContainer: React.FC = () => {
                         id={id} 
                         handleDelete={() => handleDelete(id)}
                         handleUpdate={() => handleUpdate(name.toLowerCase())}
+                        arrayOfProgress={arrayOfProgress}
                     />
                 ))
             ) : <div>no city</div>
