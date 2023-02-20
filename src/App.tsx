@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import Details from './Pages/Details/Details';
+import DetailsContainer from './Pages/Details/DetailsContainer';
 import Main from './Pages/Main/Main';
 
 function App() {
@@ -7,7 +7,7 @@ function App() {
     <div style={{ width: "100vw", height: "100vh"}}>
       <Routes>
         <Route path="*" element={<Main />} />
-        <Route path="/details/:city" element={<Details />} />
+        <Route path="/details/:city" element={<DetailsContainer />} />
       </Routes>
     </div>
   );

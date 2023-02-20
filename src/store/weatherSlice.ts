@@ -7,18 +7,35 @@ export type WeatherStateType = {
     isLoading: boolean,
     error: boolean,
     updateInProgress: string[],
+    weatherDetails: {name: string}[]
 };
 
 const initialState: WeatherStateType = {
     cityList: [],
     isLoading: false,
     error: false,
-    updateInProgress: []
+    updateInProgress: [],
+    weatherDetails: []
 };
 
 export const fetchWeather = createAsyncThunk(
     'weather/fetchWeather',
     async (city: string) => {
+            const res = await fetch(
+                `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${WEATHER_API_KEY}`
+            );
+            
+            if (res.ok) {
+                const data = await res.json();
+                return data;
+            };
+            return false;
+    }
+);
+
+export const getWeatherDetails = createAsyncThunk(
+    'weather/getWeatherDetails',
+    async (city: string | undefined) => {
             const res = await fetch(
                 `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${WEATHER_API_KEY}`
             );
@@ -86,6 +103,15 @@ const weatherSlice = createSlice({
             const index = arrayOfCityName.indexOf(action.payload.name);
             state.cityList[index] = action.payload;
             state.updateInProgress = state.updateInProgress.filter(i => i.toLowerCase() !== action.payload.name.toLowerCase());
+         })
+         builder.addCase(getWeatherDetails.fulfilled, (state, action) => {
+            if (!action.payload) {
+             state.weatherDetails = state.weatherDetails;
+             return;
+            }
+
+            state.weatherDetails.push(action.payload);
+            debugger;
          })
       },
     })
