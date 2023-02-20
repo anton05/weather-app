@@ -28,7 +28,7 @@ const DetailsContainer: React.FC<any> = () => {
     }, [arrayOfCity]);
 
     return (
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
             { weatherDetails ? <DetailsCard weatherDetails={weatherDetails} /> : <div>no data</div> }
         </div>
     ); 

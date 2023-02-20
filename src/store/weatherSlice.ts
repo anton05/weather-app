@@ -111,7 +111,6 @@ const weatherSlice = createSlice({
             }
 
             state.weatherDetails.push(action.payload);
-            debugger;
          })
       },
     })
