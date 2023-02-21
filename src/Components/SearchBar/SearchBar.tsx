@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '../../hook';
 import { fetchWeather } from '../../store/weatherSlice';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 const SearchBar: React.FC = () => {
     const [inputValue, setInputValue] = useState<string>("");
@@ -17,8 +17,22 @@ const SearchBar: React.FC = () => {
         setInputValue(e.target.value);  
     };
 
+    const onEnterPress = (e: React.KeyboardEvent) => {
+        if (!inputValue) {
+            return;
+        } else if (cityList?.map(c => c.name.toLowerCase())
+            .includes(inputValue.toLowerCase())) {
+            return;
+        };
+
+        if (e.charCode === 13) {
+            dispatch(fetchWeather(inputValue));
+            setInputValue("");
+        };
+    };
+
     const onButtonClick = () => {
-        if(!inputValue) {
+        if (!inputValue) {
             return;
         } else if (cityList?.map(c => c.name.toLowerCase())
             .includes(inputValue.toLowerCase())) {
@@ -35,10 +49,10 @@ const SearchBar: React.FC = () => {
                 <TextField
                     value={inputValue}
                     onChange={onInputChange}
+                    onKeyPress={onEnterPress}
                     id="standard-textarea"
                     label="City Weather"
                     placeholder="Write city..."
-                    multiline
                     variant="standard"
                 />
                 {
