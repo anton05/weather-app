@@ -50,6 +50,7 @@ const SearchBar: React.FC = () => {
                     value={inputValue}
                     onChange={onInputChange}
                     onKeyPress={onEnterPress}
+                    autoComplete="off"
                     id="standard-textarea"
                     label="City Weather"
                     placeholder="Write city..."
