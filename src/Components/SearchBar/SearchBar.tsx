@@ -53,7 +53,7 @@ const SearchBar: React.FC = () => {
                     id="standard-textarea"
                     label="City Weather"
                     placeholder="Write city..."
-                    variant="standard"
+                    variant="outlined"
                 />
                 {
                     error  
