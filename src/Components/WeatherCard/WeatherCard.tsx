@@ -30,7 +30,9 @@ const WeatherCardContainer: React.FC<WeatherItemType> = ({ name, temperature, ha
                     <div className="name">
                         {
                             name.length > 10 
-                            ? name.toUpperCase().slice(0, 8)+"..."
+                            ? <abbr title={name.toUpperCase()}>
+                                {name.toUpperCase().slice(0, 8)+"..."}
+                              </abbr>
                             : name.toUpperCase()
                         }
                     </div>
