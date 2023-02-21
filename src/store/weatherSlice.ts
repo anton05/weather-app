@@ -7,7 +7,8 @@ export type WeatherStateType = {
     isLoading: boolean,
     error: boolean,
     updateInProgress: string[],
-    weatherDetails: {name: string}[]
+    weatherDetails: {name: string}[],
+    hourlyTemperature: {time: number, temperature: number}[] | null
 };
 
 const initialState: WeatherStateType = {
@@ -15,7 +16,8 @@ const initialState: WeatherStateType = {
     isLoading: false,
     error: false,
     updateInProgress: [],
-    weatherDetails: []
+    weatherDetails: [],
+    hourlyTemperature: []
 };
 
 export const fetchWeather = createAsyncThunk(
@@ -60,6 +62,32 @@ export const updateWeather = createAsyncThunk(
                 return data;
             };
             return false;
+    }
+);
+
+export const fetchHourlyDetails = createAsyncThunk(
+    'weather/fetchHourlyDetails',
+     () => {
+        const hourlyDetails = [
+            {
+                time: 0,
+                temperature: Math.floor(Math.random() * 30)
+            },
+            {
+                time: 6,
+                temperature: Math.floor(Math.random() * 30)
+            },
+            {
+                time: 12,
+                temperature: Math.floor(Math.random() * 30)
+            },
+            {
+                time: 18,
+                temperature: Math.floor(Math.random() * 30)
+            },
+        ];
+
+        return hourlyDetails;
     }
 );
 
@@ -112,9 +140,17 @@ const weatherSlice = createSlice({
 
             state.weatherDetails.push(action.payload);
          })
+         builder.addCase(fetchHourlyDetails.fulfilled, (state, action) => {
+            if (!action.payload) {
+             state.hourlyTemperature = state.hourlyTemperature;
+             return;
+            }
+            console.log(action.payload);
+            state.hourlyTemperature = action.payload;
+         })
       },
     })
-
+    
 export const { removeCity, setLoading, updateInProgress } = weatherSlice.actions;
 
 export default weatherSlice.reducer;
